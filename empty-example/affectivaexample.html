@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>p5.js example</title>
+    <style> body {padding: 0; margin: 0;} </style>
+    <script src="https://download.affectiva.com/js/3.2/affdex.js"></script>
+    <script src="../p5.min.js"></script>
+    <script src="../addons/p5.dom.min.js"></script>
+    <script src="../addons/p5.sound.min.js"></script>
+    <script src="sketch.js"></script>
+    <style>
+      #emoji { font-size:10em; }
+    </style>
+  </head>
+  <body>
+    <div id='video'></div>
+    <div id='emoji'></div>
+  </body>
+  <script>
+    window.onload = function() {
+      const videoWidth = 640, videoHeight = 480
+      const faceMode = affdex.FaceDetectorMode.LARGE_FACES
+      
+      const detector = new affdex.CameraDetector(
+        document.querySelector('#video'),
+        videoWidth, videoHeight, faceMode
+      )
+      
+      //detector.detectEmotions.joy = true
+      detector.detectAllEmojis()
+      
+      detector.addEventListener( 'onImageResultsSuccess', function( faces ) {
+        if( faces.length > 0 ) {
+          document.querySelector('#emoji').innerText = faces[0].emojis.dominantEmoji
+        }
+      })
+      
+      detector.start()
+    }
+  </script>
+</html>
